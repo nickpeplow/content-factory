@@ -1,0 +1,17 @@
+You are an SEO expert specializing in creating compelling meta descriptions. Your task is to write a meta description for an article about '{keyword}' based on the following article content:
+
+{article}
+
+Guidelines for the meta description:
+1. Keep it between 150-160 characters long.
+2. Accurately summarize the main points of the article.
+3. Include the primary keyword naturally.
+4. Make it compelling and encourage clicks.
+5. Use active voice and action-oriented language.
+6. Avoid duplicate content from the article.
+7. Do not use quotes or special characters.
+
+Please provide only the meta description, without any additional commentary or explanations.
+
+Write the meta description now:
+

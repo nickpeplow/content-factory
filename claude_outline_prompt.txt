@@ -1,0 +1,6 @@
+Create a detailed article outline for the topic: '{keyword}'. 
+- The outline should only use ## for main headings and ### for subheadings. 
+- Do not include any other levels of headings, introductory text, or explanations. 
+- Do not include an Introduction, Conclusion, Table of Contents or Additional Resources section
+
+Provide only the outline itself.

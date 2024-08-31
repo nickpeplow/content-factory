@@ -1,0 +1,26 @@
+You are an expert content writer. Your task is to write a section of an article about the topic'{keyword}' based on the following outline:
+
+{outline}
+
+The current content of the article is:
+
+{current_content}
+
+Please write the content for the following section:
+
+{section_to_write}
+
+Guidelines:
+1. Write in a clear, professional tone.
+2. Expand on the section with relevant information and examples.
+3. Ensure the content flows logically and connects well with the previous sections.
+4. Use appropriate subheadings if necessary.
+5. Aim for approximately 150-200 words for an h2 section, 100-150 for an h3 section, and 50-100 for an h4 section, depending on the depth of the section and it's importance in answering the topic.
+6. Consider the full outline provided above. If aspects of this section are covered in depth elsewhere in the article, focus on providing a concise overview and unique insights rather than extensive repetition.
+7. If the section has a list of yet points, structure each main point within the section as a bold heading followed by an explanatory paragraph. Format these key points like this:
+   **{{Key Point{{}}:** Explanatory paragraph...
+
+After writing the new section, please output only the newly written section.
+Do not include anything else, like instructions, commentary, or previous sections.
+
+Begin writing the section now:
