@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from pyairtable import Api
-from claude_api import generate_outline as claude_generate_outline, write_article_section as claude_write_article_section, generate_meta_description as claude_generate_meta_description
+from claude_api import generate_outline, write_article_section, generate_meta_description, write_introduction
 
 def get_airtable_data():
     load_dotenv()
@@ -25,7 +25,7 @@ def create_outlines():
         keyword = record['fields']['Keyword']
         print(f"\nKeyword: {keyword}")
         print("Generating outline...")
-        outline = claude_generate_outline(keyword)
+        outline = generate_outline(keyword)
         if outline:
             print("Outline generated successfully.")
             outline_cleaned = '\n'.join(line for line in outline.split('\n') if line.strip())
@@ -57,7 +57,7 @@ def create_articles():
         full_article = ""
         for section in sections:
             print(f"Writing section: {section}")
-            section_content = claude_write_article_section(keyword, outline, full_article, section)
+            section_content = write_article_section(keyword, outline, full_article, section)
             if section_content:
                 full_article += section_content + "\n\n"
                 print("Current full article:")
@@ -90,7 +90,7 @@ def add_meta_descriptions():
         article = record['fields']['Article']
         print(f"\nKeyword: {keyword}")
         print("Generating meta description...")
-        meta_description = claude_generate_meta_description(keyword, article)
+        meta_description = generate_meta_description(keyword, article)
         if meta_description:
             print("Meta description generated successfully.")
             table.update(record['id'], {'Meta Description': meta_description})
@@ -101,5 +101,30 @@ def add_meta_descriptions():
     
     print(f"\nProcessed {len(records_needing_meta)} record(s) that needed meta descriptions.")
 
+def create_introductions():
+    print("Creating introductions...")
+    table, records = get_airtable_data()
+    records_needing_intro = [r for r in records if r['fields'].get('Outline') and not r['fields'].get('Introduction')]
+    
+    if not records_needing_intro:
+        print("No records found that need introductions.")
+        return
+
+    for record in records_needing_intro:
+        keyword = record['fields']['Keyword']
+        outline = record['fields']['Outline']
+        print(f"\nKeyword: {keyword}")
+        print("Generating introduction...")
+        introduction = write_introduction(keyword, outline)  # Use write_introduction from claude_api
+        if introduction:
+            print("Introduction generated successfully.")
+            table.update(record['id'], {'Introduction': introduction})
+            print("Introduction saved to Airtable.")
+        else:
+            print("Failed to generate introduction.")
+        print("-" * 50)
+    
+    print(f"\nProcessed {len(records_needing_intro)} record(s) that needed introductions.")
+
 # Add this line at the end of the file to ensure the function is exported
-__all__ = ['create_outlines', 'create_articles', 'add_meta_descriptions']
+__all__ = ['create_outlines', 'create_articles', 'add_meta_descriptions', 'create_introductions']

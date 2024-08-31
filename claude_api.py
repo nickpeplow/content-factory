@@ -39,9 +39,10 @@ def read_prompt_template(filename):
 
 OUTLINE_PROMPT_TEMPLATE = read_prompt_template('claude_outline_prompt.txt')
 ARTICLE_PROMPT_TEMPLATE = read_prompt_template('claude_article_prompt.txt')
+INTRODUCTION_PROMPT_TEMPLATE = read_prompt_template('claude_introduction_prompt.txt')
 
-if OUTLINE_PROMPT_TEMPLATE is None or ARTICLE_PROMPT_TEMPLATE is None:
-    raise FileNotFoundError("One or both prompt template files are missing. Please check that both 'claude_outline_prompt.txt' and 'claude_article_prompt.txt' exist in the same directory as this script.")
+if OUTLINE_PROMPT_TEMPLATE is None or ARTICLE_PROMPT_TEMPLATE is None or INTRODUCTION_PROMPT_TEMPLATE is None:
+    raise FileNotFoundError("One or more prompt template files are missing. Please check that 'claude_outline_prompt.txt', 'claude_article_prompt.txt', and 'claude_introduction_prompt.txt' exist in the same directory as this script.")
 
 def generate_outline(keyword):
     headers = {
@@ -138,4 +139,36 @@ def generate_meta_description(keyword, article):
         print(f"Error calling Claude API: {e}")
         return None
 
-print("generate_outline, write_article_section, and generate_meta_description functions are defined in claude_api.py")
+def write_introduction(keyword, outline):
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": CLAUDE_API_KEY,
+        "anthropic-version": "2023-06-01"
+    }
+
+    prompt = INTRODUCTION_PROMPT_TEMPLATE.format(
+        keyword=keyword,
+        outline=outline
+    )
+
+    data = {
+        "model": CLAUDE_MODEL,
+        "max_tokens": 1000,
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    }
+
+    try:
+        response = make_rate_limited_request(CLAUDE_API_URL, json=data, headers=headers)
+        response.raise_for_status()
+        result = response.json()
+        return result['content'][0]['text']
+    except requests.exceptions.RequestException as e:
+        print(f"Error calling Claude API: {e}")
+        return None
+
+print("generate_outline, write_article_section, generate_meta_description, and write_introduction functions are defined in claude_api.py")
